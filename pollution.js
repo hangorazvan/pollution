@@ -7,7 +7,7 @@
 Module.register("pollution", {
 	// Default module config.
 	defaults: {
-		lat: ,
+		lat: "",
 		lon: "",
 		location: "",
 		appid: "",
