@@ -2,7 +2,7 @@
 
 https://github.com/hangorazvan/pollution
 
-MagicMirror2 module based on Openweathermap Air Pollution
+MagicMirror2 stand alone module based on Openweathermap Air Pollution also included in Onecall module https://github.com/hangorazvan/onecall
 
 #### Air Quality Index
 
