@@ -23,7 +23,7 @@ Module.register("pollution", {
 		appendLocationNameToHeader: true,
 		useLocationAsHeader: false,
 		
-		calculateAqi: true,			// calculate AQI from pollutants concentration
+		calculateAqi: false,			// calculate AQI from pollutants concentration (not fully tested)
 		showAqiTime: true,			// show last update time
 		showAqiData: true,			// show AQI calculation pollutants, hidding last update
 		showPollution: false,		// snow list of all pollutants, hidding AQI calculation of all pollutants
