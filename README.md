@@ -10,16 +10,15 @@ MagicMirror2 module based on Openweathermap Air Pollution
 <img src=https://github.com/hangorazvan/pollution/blob/master/aqi.png>
 
 	{
-		module: "onecall",
+		module: "pollution",
 		position: "top_right",
 		header: "Air Quality Index",
-		classes: "air quality day",
+		classes: "air quality",
 		disabled: false,
 		config: {
 			lat: "",				// your location latitude,
 			lon: "",				// your location longitude,
 			appid: "",				// your openweathermap API key,
-			endpointType: "aqi",
 			calculateAqi: true,			// calculate AQI from pollutants concentration
 			showAqiTime: true,			// show last update time
 			showAqiData: true,			// show AQI calculation pollutants, hidding last update
@@ -61,6 +60,6 @@ Air Quality compliments to put in your config.js
 		],			
 	}
 
-Redesigned by Răzvan Cristea
+Designed by Răzvan Cristea
 https://github.com/hangorazvan
 Creative Commons BY-NC-SA 4.0, Romania.
