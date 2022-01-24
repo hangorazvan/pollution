@@ -1,4 +1,4 @@
-# Pollution (Openweathermap/air_pollution)
+# Pollution (OpenWeatherMap/Air_Pollution)
 
 https://github.com/hangorazvan/pollution
 
