@@ -26,7 +26,7 @@ Module.register("pollution", {
 		calculateAqi: true,			// calculate AQI from pollutants concentration
 		showAqiTime: true,			// show last update time
 		showAqiData: true,			// show AQI calculation pollutants, hidding last update
-		showPollution: false,		// snow list of all pollutants, hidding AQI calculationt of all pollutants
+		showPollution: false,		// snow list of all pollutants, hidding AQI calculation of all pollutants
 	},
 
 	// Define required scripts.
