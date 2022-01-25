@@ -56,6 +56,7 @@ Module.register("pollution", {
 
 		this.aqi = null;	 			// Air Quality
 		this.aqi_t = null;
+		this.aqi_i = null;
 		this.c_co = null;
 		this.c_no = null;
 		this.c_no2 = null;
@@ -104,133 +105,122 @@ Module.register("pollution", {
 		*/
 
 		var aqi = document.createElement("div");
-		aqi.className = "normal medium aqi bright";
-		var aqi_q = null; var aqi_c = null;
-		if (this.config.calculateAqi) {
-			var aqi_i = null;
-			aqi_i = Math.max(
-				this.c_no2/4,       // mandatory
-				this.c_no/4,        // optional
-				this.c_pm10/1.8,    // mandatory 
-				this.c_o3/2.4,      // mandatory
-				this.c_pm25/1.1,    // optional
-				this.c_so2/5,       // optional
-				this.c_nh3/16,      // optional
-				this.c_co/200       // optional
+			aqi.className = "normal medium aqi bright";
+			var aqi_q = null; var aqi_c = null;
+			if (this.config.calculateAqi) {
+				this.aqi_i = Math.max(
+				Math.round(this.c_no2),      // mandatory
+				Math.round(this.c_no),       // optional
+				Math.round(this.c_pm10),     // mandatory 
+				Math.round(this.c_o3),       // mandatory
+				Math.round(this.c_pm25),     // optional
+				Math.round(this.c_so2),      // optional
+				Math.round(this.c_nh3),      // optional
+				Math.round(this.c_co/1000)   // optional
 			).toFixed(0);
 
-			if (aqi_i <= 25) {
+			if (this.aqi_i <= 25) {
 				aqi_q = this.translate("Good");
 				aqi_c = "lime";
-			} else if (aqi_i > 25 && aqi_i <= 50) {
+			} else if (this.aqi_i > 25 && this.aqi_i <= 50) {
 				aqi_q = this.translate("Fair");
 				aqi_c = "yellow";
-			} else if (aqi_i > 50 && aqi_i <= 75) {
+			} else if (this.aqi_i > 50 && this.aqi_i <= 75) {
 				aqi_q = this.translate("Moderate");
 				aqi_c = "orange";
-			} else if (aqi_i > 75 && aqi_i <= 100) {
+			} else if (this.aqi_i > 75 && this.aqi_i <= 100) {
 				aqi_q = this.translate("Poor");
 				aqi_c = "coral";
-			} else if (aqi_i > 100) {
+			} else if (this.aqi_i > 100) {
 				aqi_q = this.translate("Unhealty");
-				aqi_c = "red";
+				aqi_c = "redrf";
 			}
 
-			aqi.innerHTML = this.translate("Index") + " <i class=\"fa fa-leaf " + aqi_c + "\"></i> <span class=" + aqi_c + ">" + aqi_q + " (" + aqi_i + ")</span>";
+			aqi.innerHTML = this.translate("Index") + " <i class=\"fa fa-leaf " + aqi_c + "\"></i> <span class=" + aqi_c + ">" + aqi_q + " (" + this.aqi_i + ")</span>";
 			
-				} else {
-			if (this.aqi == 1) { 
-				aqi_q = this.translate("Good");
-				aqi_c = "lime";
-			} else if (this.aqi == 2) { 
-				aqi_q = this.translate("Fair");
-				aqi_c = "yellow";
-			} else if (this.aqi == 3) { 
-				aqi_q = this.translate("Moderate");
-				aqi_c = "orange";
-			} else if (this.aqi == 4) { 
-				aqi_q = this.translate("Poor");
-				aqi_c = "orangered";
-			} else if (this.aqi == 5) { 
-				aqi_q = this.translate("Unhealty");
-				aqi_c = "red";
+		} else {
+				if (this.aqi == 1) { 
+					aqi_q = this.translate("Good");
+					aqi_c = "lime";
+				} else if (this.aqi == 2) { 
+					aqi_q = this.translate("Fair");
+					aqi_c = "yellow";
+				} else if (this.aqi == 3) { 
+					aqi_q = this.translate("Moderate");
+					aqi_c = "orange";
+				} else if (this.aqi == 4) { 
+					aqi_q = this.translate("Poor");
+					aqi_c = "coral";
+				} else if (this.aqi == 5) { 
+					aqi_q = this.translate("Unhealty");
+					aqi_c = "redrf";
+				}
+				aqi.innerHTML = this.translate("Index") + " <i class=\"fa fa-leaf " + aqi_c + "\"></i> <span class=" + aqi_c + ">" + aqi_q + " (" + this.aqi + ")</span>";
 			}
-
-			aqi.innerHTML = this.translate("Index") + " <i class=\"fa fa-leaf " + aqi_c + "\"></i> <span class=" + aqi_c + ">" + aqi_q + " (" + this.aqi + ")</span>";
-		}
-		wrapper.appendChild(aqi);
-
-		if (this.config.showAqiData && !this.config.showPollution) {
-			var aqi_d = document.createElement("div");
-			aqi_d.className = "normal small aqi_d";
-			if (this.config.calculateAqi) {
-    			aqi_d.innerHTML = "O<sub>3</sub> <span class=bright>" + (this.c_o3/2.4).toFixed(0)
-    				+ "</span>; PM<sub>10</sub> <span class=bright>" + (this.c_pm10/1.8).toFixed(0)
-    				+ "</span>; PM<sub>2.5</sub> <span class=bright>" + (this.c_pm25/1.1).toFixed(0)
-    				+ "</span>; NO<sub>2</sub> <span class=bright>" + (this.c_no2/4).toFixed(0)
-    				+ "</span>; SO<sub>2</sub> <span class=bright>" + (this.c_so2/5).toFixed(0)
-    				+ "</span>";
-			} else {
-    			aqi_d.innerHTML = "O<sub>3</sub> <span class=bright>" + this.c_o3.toFixed(0).replace(".", this.config.decimalSymbol)
-    				+ "</span>; PM<sub>10</sub> <span class=bright>" + this.c_pm10.toFixed(0).replace(".", this.config.decimalSymbol)
-    				+ "</span>; PM<sub>2.5</sub> <span class=bright>" + this.c_pm25.toFixed(0).replace(".", this.config.decimalSymbol)
-    				+ "</span>; NO<sub>2</sub> <span class=bright>" + this.c_no2.toFixed(0).replace(".", this.config.decimalSymbol)
-    				+ "</span>; SO<sub>2</sub> <span class=bright>" + this.c_so2.toFixed(0).replace(".", this.config.decimalSymbol)
-    				+ "</span>";
-			}
-			wrapper.appendChild(aqi_d);
-
-		} else if (this.config.showAqiTime) {
-			var aqi_t = document.createElement("div");
-			aqi_t.className = "shade small aqi_t";
-			aqi_t.innerHTML = this.translate("Update") + this.aqi_t + ", " + this.config.location;
-			wrapper.appendChild(aqi_t);
-		}
+			wrapper.appendChild(aqi);
 			
-		if (this.config.showPollution) {
-			this.config.showAqiData = false;
-			var spacer = document.createElement("br");
-			wrapper.appendChild(spacer);
+			if (this.config.showAqiData && !this.config.showPollution) {
+		 		var aqi_d = document.createElement("div");
+				aqi_d.className = "normal small aqi_d";
+				aqi_d.innerHTML = "PM<sub>10</sub> <span class=bright>" + Math.round(this.c_pm10)
+            			+ "</span>; PM<sub>2.5</sub> <span class=bright>" + Math.round(this.c_pm25)
+	            		+ "</span>; O<sub>3</sub> <span class=bright>" + Math.round(this.c_o3)
+		    	        + "</span>; NO<sub>2</sub> <span class=bright>" + Math.round(this.c_no2)
+			    		+ "</span>; SO<sub>2</sub> <span class=bright>" + Math.round(this.c_so2)
+				    	+ "</span>";
+			    wrapper.appendChild(aqi_d);
 
-			var c_o3 = document.createElement("div");
-			c_o3.className = "normal small c_o3";
-			c_o3.innerHTML = "Ozone (O<sub>3</sub>) <span class=bright>" + this.c_o3.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
-			wrapper.appendChild(c_o3);
+			} else if (this.config.showAqiTime) {
+		 		var aqi_t = document.createElement("div");
+				aqi_t.className = "shade small aqi_t";
+				aqi_t.innerHTML = this.translate("Update") + this.aqi_t + ", " + this.config.location;
+				wrapper.appendChild(aqi_t);
+			}
+			
+			if (this.config.showPollution) {
+				this.config.showAqiData = false;
+				var spacer = document.createElement("br");
+				wrapper.appendChild(spacer);
 
-			var c_pm10 = document.createElement("div");
-			c_pm10.className = "normal small c_pm10";
-			c_pm10.innerHTML = "10μm particle (PM<sub>10</sub>) <span class=bright>" + this.c_pm10.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
-			wrapper.appendChild(c_pm10);
+				var c_pm10 = document.createElement("div");
+				c_pm10.className = "normal small c_pm10";
+				c_pm10.innerHTML = "10μm particle (PM<sub>10</sub>) <span class=bright>" + this.c_pm10.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
+				wrapper.appendChild(c_pm10);
 
-			var c_pm25 = document.createElement("div");
-			c_pm25.className = "normal small c_pm25";
-			c_pm25.innerHTML = "2.5μm particle (PM<sub>2.5</sub>) <span class=bright>" + this.c_pm25.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
-			wrapper.appendChild(c_pm25);
+				var c_pm25 = document.createElement("div");
+				c_pm25.className = "normal small c_pm25";
+				c_pm25.innerHTML = "2.5μm particle (PM<sub>2.5</sub>) <span class=bright>" + this.c_pm25.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
+				wrapper.appendChild(c_pm25);
+				
+				var c_o3 = document.createElement("div");
+				c_o3.className = "normal small c_o3";
+				c_o3.innerHTML = "Ozone (O<sub>3</sub>) <span class=bright>" + this.c_o3.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
+				wrapper.appendChild(c_o3);
 
-			var c_no2 = document.createElement("div");
-			c_no2.className = "normal small c_no2";
-			c_no2.innerHTML = "Nitrogen dioxide (NO<sub>2</sub>) <span class=bright>" + this.c_no2.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
-			wrapper.appendChild(c_no2);
+				var c_no2 = document.createElement("div");
+				c_no2.className = "normal small c_no2";
+				c_no2.innerHTML = "Nitrogen dioxide (NO<sub>2</sub>) <span class=bright>" + this.c_no2.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
+				wrapper.appendChild(c_no2);
 
-			var c_no = document.createElement("div");
-			c_no.className = "normal small c_no";
-			c_no.innerHTML = "Nitrogen monoxide (NO) <span class=bright>" + this.c_no.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
-			wrapper.appendChild(c_no);
+				var c_no = document.createElement("div");
+				c_no.className = "normal small c_no";
+				c_no.innerHTML = "Nitrogen monoxide (NO) <span class=bright>" + this.c_no.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
+				wrapper.appendChild(c_no);
 
-			var c_so2 = document.createElement("div");
-			c_so2.className = "normal small c_so2";
-			c_so2.innerHTML = "Sulphur dioxide (SO<sub>2</sub>) <span class=bright>" + this.c_so2.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
-			wrapper.appendChild(c_so2);
+				var c_so2 = document.createElement("div");
+				c_so2.className = "normal small c_so2";
+				c_so2.innerHTML = "Sulphur dioxide (SO<sub>2</sub>) <span class=bright>" + this.c_so2.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
+				wrapper.appendChild(c_so2);
 
-			var c_co = document.createElement("div");
-			c_co.className = "normal small c_co";
-			c_co.innerHTML = "Carbon monoxide (CO) <span class=bright>" + this.c_co.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
-			wrapper.appendChild(c_co);
+				var c_co = document.createElement("div");
+				c_co.className = "normal small c_co";
+				c_co.innerHTML = "Carbon monoxide (CO) <span class=bright>" + (this.c_co/1000).toFixed(2).replace(".", this.config.decimalSymbol) + " mg/m³</span>";
+				wrapper.appendChild(c_co);
 
-			var c_nh3 = document.createElement("div");
-			c_nh3.className = "normal small c_nh3";
-			c_nh3.innerHTML = "Ammonia (NH<sub>3</sub>) <span class=bright>" + this.c_nh3.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
-			wrapper.appendChild(c_nh3);
+				var c_nh3 = document.createElement("div");
+				c_nh3.className = "normal small c_nh3";
+				c_nh3.innerHTML = "Ammonia (NH<sub>3</sub>) <span class=bright>" + this.c_nh3.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
+				wrapper.appendChild(c_nh3);
 		}
 
 		return wrapper;
@@ -326,7 +316,11 @@ Module.register("pollution", {
 		}
 
 		this.updateDom(this.config.animationSpeed);
-		this.sendNotification("CURRENTWEATHER_TYPE", { type: "AQI_" + this.aqi });
+		if (this.config.calculateAqi) {
+			this.sendNotification("CURRENTWEATHER_TYPE", { type: "AQI_" + this.aqi_i });
+		} else {
+		    this.sendNotification("CURRENTWEATHER_TYPE", { type: "AQI_" + this.aqi });
+		}
 	},
 
 	/* scheduleUpdate()
