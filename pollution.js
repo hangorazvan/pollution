@@ -12,9 +12,9 @@ Module.register("pollution", {
 		location: "",
 		appid: "",
 		units: config.units,
-		dayUpdateInterval: 10 * 60 * 1000, // every 10 minutes
-		nightUpdateInterval: 15 * 60 * 1000, // every 15 minutes
-		initialLoadDelay: 0, // 0 seconds delay
+		dayUpdateInterval: 10 * 60 * 1000,     // every 10 minutes
+		nightUpdateInterval: 15 * 60 * 1000,   // every 15 minutes
+		initialLoadDelay: 0,                   // 0 seconds delay
 		retryDelay: 2000,
 		animationSpeed: 1000,
 		timeFormat: config.timeFormat,
@@ -23,10 +23,10 @@ Module.register("pollution", {
 		appendLocationNameToHeader: true,
 		useLocationAsHeader: false,
 		
-		calculateAqi: false,			// calculate AQI from pollutants concentration (not fully tested)
-		showAqiTime: true,			// show last update time
-		showAqiData: true,			// show AQI calculation pollutants, hidding last update
-		showPollution: false,		// snow list of all pollutants, hidding AQI calculation of all pollutants
+		calculateAqi: false,        // calculate AQI from pollutants concentration (not fully tested)
+		showAqiTime: true,          // show last update time
+		showAqiData: true,          // show AQI calculation pollutants, hidding last update
+		showPollution: false,       // snow list of all pollutants, hidding AQI calculation of all pollutants
 	},
 
 	// Define required scripts.
@@ -41,10 +41,10 @@ Module.register("pollution", {
 
 	// Define required translations.
 	getTranslations: function () {
-        return {
-            en: "en.json",
-            ro: "ro.json"
-        };
+		return {
+			en: "en.json",
+			ro: "ro.json"
+		};
 	},
 
 	// Define start sequence.
@@ -90,33 +90,33 @@ Module.register("pollution", {
 		var wrapper = document.createElement("div");
 		wrapper.className = "airpollution";
 
-		/*
-		Quality   Index     Sub-index   CAQI calculation from highest pollutant concentration in μg/m3
+			/*
+			Quality   Index     Sub-index   CAQI calculation from highest pollutant concentration in µg/m3
 
-		                                O3          NO2         PM10        PM25         SO2         NH3        CO
+			                                O3          NO2         PM10        PM25         SO2         NH3        CO
 
-		Good        1       0-25        0-60        0-50        0-25        0-15         0-50        0-200      0-5000
-		Fair        2       25-50       60-120      50-100      25-50       15-30        50-100      200-400    5000-7500
-		Moderate    3       50-75       120-180     100-200     50-90       30-55        100-350     400-800    7500-10000
-		Poor        4       75-100      180-240     200-400     90-180      55-110       350-500     800-1600   10000-20000
-		Unhealty    5       > 100       > 240       > 400       > 180       > 110        > 500       > 1600     > 20000
+			Good        1       0-25        0-60        0-50        0-25        0-15         0-50        0-200      0-5000
+			Fair        2       25-50       60-120      50-100      25-50       15-30        50-100      200-400    5000-7500
+			Moderate    3       50-75       120-180     100-200     50-90       30-55        100-350     400-800    7500-10000
+			Poor        4       75-100      180-240     200-400     90-180      55-110       350-500     800-1600   10000-20000
+			Very Poor   5       > 100       > 240       > 400       > 180       > 110        > 500       > 1600     > 20000
 
-		Source: https://www.airqualitynow.eu/download/CITEAIR-Comparing_Urban_Air_Quality_across_Borders.pdf
-		*/
+			Source: https://www.airqualitynow.eu/download/CITEAIR-Comparing_Urban_Air_Quality_across_Borders.pdf
+			*/
 
-		var aqi = document.createElement("div");
+			var aqi = document.createElement("div");
 			aqi.className = "normal medium aqi bright";
 			var aqi_q = null; var aqi_c = null;
 			if (this.config.calculateAqi) {
 				this.aqi_i = Math.max(
-				Math.round(this.c_no2),      // mandatory
-				Math.round(this.c_no),       // optional
-				Math.round(this.c_pm10),     // mandatory 
-				Math.round(this.c_o3),       // mandatory
-				Math.round(this.c_pm25),     // optional
-				Math.round(this.c_so2),      // optional
-				Math.round(this.c_nh3),      // optional
-				Math.round(this.c_co/1000)   // optional
+				Math.round(this.c_no2),		// mandatory
+				Math.round(this.c_no),		// optional
+				Math.round(this.c_pm10),	// mandatory 
+				Math.round(this.c_o3),		// mandatory
+				Math.round(this.c_pm25),	// optional
+				Math.round(this.c_so2),		// optional
+				Math.round(this.c_nh3),		// optional
+				Math.round(this.c_co/1000)	// optional
 			).toFixed(0);
 
 			if (this.aqi_i <= 25) {
@@ -133,7 +133,7 @@ Module.register("pollution", {
 				aqi_c = "coral";
 			} else if (this.aqi_i > 100) {
 				aqi_q = this.translate("Unhealty");
-				aqi_c = "redrf";
+				aqi_c = "red";
 			}
 
 			aqi.innerHTML = this.translate("Index") + " <i class=\"fa fa-leaf " + aqi_c + "\"></i> <span class=" + aqi_c + ">" + aqi_q + " (" + this.aqi_i + ")</span>";
@@ -153,25 +153,25 @@ Module.register("pollution", {
 					aqi_c = "coral";
 				} else if (this.aqi == 5) { 
 					aqi_q = this.translate("Unhealty");
-					aqi_c = "redrf";
+					aqi_c = "red";
 				}
 				aqi.innerHTML = this.translate("Index") + " <i class=\"fa fa-leaf " + aqi_c + "\"></i> <span class=" + aqi_c + ">" + aqi_q + " (" + this.aqi + ")</span>";
 			}
 			wrapper.appendChild(aqi);
 			
 			if (this.config.showAqiData && !this.config.showPollution) {
-		 		var aqi_d = document.createElement("div");
+				var aqi_d = document.createElement("div");
 				aqi_d.className = "normal small aqi_d";
 				aqi_d.innerHTML = "PM<sub>10</sub> <span class=bright>" + Math.round(this.c_pm10)
-            			+ "</span>; PM<sub>2.5</sub> <span class=bright>" + Math.round(this.c_pm25)
-	            		+ "</span>; O<sub>3</sub> <span class=bright>" + Math.round(this.c_o3)
-		    	        + "</span>; NO<sub>2</sub> <span class=bright>" + Math.round(this.c_no2)
-			    		+ "</span>; SO<sub>2</sub> <span class=bright>" + Math.round(this.c_so2)
-				    	+ "</span>";
-			    wrapper.appendChild(aqi_d);
+						+ "</span>; PM<sub>2.5</sub> <span class=bright>" + Math.round(this.c_pm25)
+						+ "</span>; O<sub>3</sub> <span class=bright>" + Math.round(this.c_o3)
+						+ "</span>; NO<sub>2</sub> <span class=bright>" + Math.round(this.c_no2)
+						+ "</span>; SO<sub>2</sub> <span class=bright>" + Math.round(this.c_so2)
+						+ "</span>";
+				wrapper.appendChild(aqi_d);
 
 			} else if (this.config.showAqiTime) {
-		 		var aqi_t = document.createElement("div");
+				var aqi_t = document.createElement("div");
 				aqi_t.className = "shade small aqi_t";
 				aqi_t.innerHTML = this.translate("Update") + this.aqi_t + ", " + this.config.location;
 				wrapper.appendChild(aqi_t);
@@ -221,9 +221,9 @@ Module.register("pollution", {
 				c_nh3.className = "normal small c_nh3";
 				c_nh3.innerHTML = "Ammonia (NH<sub>3</sub>) <span class=bright>" + this.c_nh3.toFixed(2).replace(".", this.config.decimalSymbol) + " µg/m³</span>";
 				wrapper.appendChild(c_nh3);
-		}
+			}
 
-		return wrapper;
+			return wrapper;
 	},
 
 	// Override getHeader method.
@@ -317,21 +317,21 @@ Module.register("pollution", {
 
 		this.updateDom(this.config.animationSpeed);
 		if (this.config.calculateAqi) {
-		    var aqi_s = 0;
-		    if (this.aqi_i > 0 && this.aqi_i<=25) {
-		        aqi_s = 1;
-		    } else if (this.aqi_i > 25 && this.aqi_i<=50) {
-		        aqi_s = 2;
-		    } else if (this.aqi_i > 50 && this.aqi_i<=75) {
-		        aqi_s = 3;
-		    } else if (this.aqi_i > 75 && this.aqi_i<=100) {
-		        aqi_s = 4;
-		    } else if (this.aqi_i > 100) {
-		        aqi_s = 5;
-		    }
+			var aqi_s = 0;
+			if (this.aqi_i > 0 && this.aqi_i<=25) {
+				aqi_s = 1;
+			} else if (this.aqi_i > 25 && this.aqi_i<=50) {
+				aqi_s = 2;
+			} else if (this.aqi_i > 50 && this.aqi_i<=75) {
+				aqi_s = 3;
+			} else if (this.aqi_i > 75 && this.aqi_i<=100) {
+				aqi_s = 4;
+			} else if (this.aqi_i > 100) {
+				aqi_s = 5;
+			}
 			this.sendNotification("CURRENTWEATHER_TYPE", { type: "AQI_" + aqi_s });
 		} else {
-		    this.sendNotification("CURRENTWEATHER_TYPE", { type: "AQI_" + this.aqi });
+			this.sendNotification("CURRENTWEATHER_TYPE", { type: "AQI_" + this.aqi });
 		}
 	},
 
