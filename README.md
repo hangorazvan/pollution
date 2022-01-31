@@ -19,7 +19,7 @@ MagicMirror2 stand alone module based on Openweathermap Air Pollution also inclu
 			lat: "",				// your location latitude,
 			lon: "",				// your location longitude,
 			appid: "",				// your openweathermap API key,
-			calculateAqi: false,			// calculate AQI from pollutants concentration (not fully tested)
+			calculateAqi: true,			// calculate AQI from pollutants concentration
 			showAqiTime: true,			// show last update time
 			showAqiData: true,			// show AQI calculation pollutants, hidding last update
 			showPollution: false,			// snow list of all pollutants, hidding AQI calculation of all pollutants
@@ -41,6 +41,8 @@ MagicMirror2 stand alone module based on Openweathermap Air Pollution also inclu
 	*/
 
 Air Quality compliments to put in your config.js
+<br>You need to use my compliments_plus to work with AQI compliments
+https://github.com/hangorazvan/compliments_plus
 
 	compliments: {
 		AQI_1 : [
