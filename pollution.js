@@ -109,36 +109,36 @@ Module.register("pollution", {
 			var aqi_q = null; var aqi_c = null;
 			if (this.config.calculateAqi) {
 				this.aqi_i = Math.max(
-				Math.round(this.c_no2),		// mandatory
-				Math.round(this.c_no),		// optional
-				Math.round(this.c_pm10),	// mandatory 
-				Math.round(this.c_o3),		// mandatory
-				Math.round(this.c_pm25),	// optional
-				Math.round(this.c_so2),		// optional
-				Math.round(this.c_nh3),		// optional
-				Math.round(this.c_co/1000)	// optional
-			).toFixed(0);
+					Math.round(this.c_no2/4),	// mandatory
+					Math.round(this.c_no/4),	// optional
+					Math.round(this.c_pm10/1.8),// mandatory 
+					Math.round(this.c_o3/2.4),	// mandatory
+					Math.round(this.c_pm25/1.1),// optional
+					Math.round(this.c_so2/5),	// optional
+					Math.round(this.c_nh3/16),	// optional
+					Math.round(this.c_co/2000)	// optional
+				).toFixed(0);
 
-			if (this.aqi_i <= 25) {
-				aqi_q = this.translate("Good");
-				aqi_c = "lime";
-			} else if (this.aqi_i > 25 && this.aqi_i <= 50) {
-				aqi_q = this.translate("Fair");
-				aqi_c = "yellow";
-			} else if (this.aqi_i > 50 && this.aqi_i <= 75) {
-				aqi_q = this.translate("Moderate");
-				aqi_c = "orange";
-			} else if (this.aqi_i > 75 && this.aqi_i <= 100) {
-				aqi_q = this.translate("Poor");
-				aqi_c = "coral";
-			} else if (this.aqi_i > 100) {
-				aqi_q = this.translate("Unhealty");
-				aqi_c = "red";
-			}
+				if (this.aqi_i <= 25) {
+					aqi_q = this.translate("Good");
+					aqi_c = "lime";
+				} else if (this.aqi_i > 25 && this.aqi_i <= 50) {
+					aqi_q = this.translate("Fair");
+					aqi_c = "yellow";
+				} else if (this.aqi_i > 50 && this.aqi_i <= 75) {
+					aqi_q = this.translate("Moderate");
+					aqi_c = "orange";
+				} else if (this.aqi_i > 75 && this.aqi_i <= 100) {
+					aqi_q = this.translate("Poor");
+					aqi_c = "coral";
+				} else if (this.aqi_i > 100) {
+					aqi_q = this.translate("Unhealty");
+					aqi_c = "red";
+				}
 
-			aqi.innerHTML = this.translate("Index") + " <i class=\"fa fa-leaf " + aqi_c + "\"></i> <span class=" + aqi_c + ">" + aqi_q + " (" + this.aqi_i + ")</span>";
+				aqi.innerHTML = this.translate("Index") + " <i class=\"fa fa-leaf " + aqi_c + "\"></i> <span class=" + aqi_c + ">" + aqi_q + " (" + this.aqi_i + ")</span>";
 			
-		} else {
+			} else {
 				if (this.aqi == 1) { 
 					aqi_q = this.translate("Good");
 					aqi_c = "lime";
@@ -162,11 +162,11 @@ Module.register("pollution", {
 			if (this.config.showAqiData && !this.config.showPollution) {
 				var aqi_d = document.createElement("div");
 				aqi_d.className = "normal small aqi_d";
-				aqi_d.innerHTML = "PM<sub>10</sub> <span class=bright>" + Math.round(this.c_pm10)
-						+ "</span>; PM<sub>2.5</sub> <span class=bright>" + Math.round(this.c_pm25)
-						+ "</span>; O<sub>3</sub> <span class=bright>" + Math.round(this.c_o3)
-						+ "</span>; NO<sub>2</sub> <span class=bright>" + Math.round(this.c_no2)
-						+ "</span>; SO<sub>2</sub> <span class=bright>" + Math.round(this.c_so2)
+				aqi_d.innerHTML = "PM<sub>10</sub> <span class=bright>" + Math.round(this.c_pm10/1.8)
+						+ "</span>; PM<sub>2.5</sub> <span class=bright>" + Math.round(this.c_pm25/1.1)
+						+ "</span>; O<sub>3</sub> <span class=bright>" + Math.round(this.c_o3/2.4)
+						+ "</span>; NO<sub>2</sub> <span class=bright>" + Math.round(this.c_no2/4)
+						+ "</span>; SO<sub>2</sub> <span class=bright>" + Math.round(this.c_so2/5)
 						+ "</span>";
 				wrapper.appendChild(aqi_d);
 
@@ -310,12 +310,6 @@ Module.register("pollution", {
 			this.c_nh3 = aqi_p.nh3;
 		}
 
-		if (!this.loaded) {
-			this.show(this.config.animationSpeed, { lockString: this.identifier });
-			this.loaded = true;
-		}
-
-		this.updateDom(this.config.animationSpeed);
 		if (this.config.calculateAqi) {
 			var aqi_s = 0;
 			if (this.aqi_i > 0 && this.aqi_i<=25) {
@@ -329,10 +323,22 @@ Module.register("pollution", {
 			} else if (this.aqi_i > 100) {
 				aqi_s = 5;
 			}
-			this.sendNotification("CURRENTWEATHER_TYPE", { type: "AQI_" + aqi_s });
+			this.sendNotification("AIRQUALITY_INDEX", { index: "AQI_" + aqi_s });
+		//	Log.info("AIRQUALITY_INDEX", { index: "AQI_" + aqi_s });
 		} else {
-			this.sendNotification("CURRENTWEATHER_TYPE", { type: "AQI_" + this.aqi });
+			this.sendNotification("AIRQUALITY_INDEX", { index: "AQI_" + this.aqi });
+		//	Log.info("AIRQUALITY_INDEX", { index: "AQI_" + this.aqi });
 		}
+
+		if (!this.loaded) {
+			this.show(this.config.animationSpeed, { lockString: this.identifier });
+			this.loaded = true;
+		}
+
+		var self = this;
+		setTimeout(function () {
+			self.updateDom(self.config.animationSpeed);
+		}, this.config.initialLoadDelay);
 	},
 
 	/* scheduleUpdate()
