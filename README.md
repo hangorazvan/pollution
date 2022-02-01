@@ -3,6 +3,7 @@
 https://github.com/hangorazvan/pollution
 
 MagicMirror2 stand alone module based on Openweathermap Air Pollution also included in Onecall module https://github.com/hangorazvan/onecall
+<br>Keep in mind that this module is for my personal use and not necessarily for sharing so don't create issues or pull requests.
 
 #### Air Quality Index
 
