@@ -270,7 +270,6 @@ Module.register("pollution", {
 					self.processAir(JSON.parse(this.response));
 				} else if (this.status === 401) {
 					self.updateDom(self.config.animationSpeed);
-					self.config.appid = self.config.backup;
 					retry = true;
 				} else {
 					Log.error(self.name + ": Incorrect APPID. Could not load Air Pollution.");
