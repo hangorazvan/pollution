@@ -109,17 +109,6 @@ Module.register("pollution", {
 			aqi.className = "normal medium aqi bright";
 			var aqi_q = null; var aqi_c = null;
 			if (this.config.calculateAqi) {
-				this.aqi_i = Math.max(
-					Math.round(this.c_no2/4*1.3),	// mandatory
-					Math.round(this.c_no/4)*1.3,	// optional
-					Math.round(this.c_pm10/1.8),	// mandatory 
-					Math.round(this.c_o3/2.4*1.7),	// mandatory
-					Math.round(this.c_pm25/1.1),	// optional
-					Math.round(this.c_so2/5),		// optional
-					Math.round(this.c_nh3/16*0.9),	// optional
-					Math.round(this.c_co/2000*0.9)	// optional
-				).toFixed(0);
-
 				if (this.aqi_i <= 25) {
 					aqi_q = this.translate("Good");
 					aqi_c = "lime";
@@ -311,6 +300,17 @@ Module.register("pollution", {
 		}
 
 		if (this.config.calculateAqi) {
+			this.aqi_i = Math.max(
+				Math.round(this.c_no2/4*1.3),	// mandatory
+				Math.round(this.c_no/4)*1.3,	// optional
+				Math.round(this.c_pm10/1.8),	// mandatory 
+				Math.round(this.c_o3/2.4*1.7),	// mandatory
+				Math.round(this.c_pm25/1.1),	// optional
+				Math.round(this.c_so2/5),		// optional
+				Math.round(this.c_nh3/16*0.9),	// optional
+				Math.round(this.c_co/2000*0.9)	// optional
+			).toFixed(0);
+
 			if (this.aqi_i <= 25) {
 				this.aqi_s = 1;
 			} else if (this.aqi_i > 25 && this.aqi_i <= 50) {
