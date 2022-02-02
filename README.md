@@ -7,7 +7,6 @@ MagicMirror2 stand alone module based on Openweathermap Air Pollution also inclu
 
 #### Air Quality Index
 
-<img src=https://github.com/hangorazvan/pollution/blob/master/aqi_c.png>
 <img src=https://github.com/hangorazvan/pollution/blob/master/aqi.png>
 
 	{
