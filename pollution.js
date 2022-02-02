@@ -158,7 +158,7 @@ Module.register("pollution", {
 				}
 				aqi.innerHTML = this.translate("Index") + " <i class=\"fa fa-leaf " + aqi_c + "\"></i> <span class=" + aqi_c + ">" + aqi_q + " (" + this.aqi + ")</span>";
 			}
-			wrapper2.appendChild(aqi);
+			wrapper.appendChild(aqi);
 			
 			if (this.config.showAqiData && !this.config.showPollution) {
 				var aqi_d = document.createElement("div");
