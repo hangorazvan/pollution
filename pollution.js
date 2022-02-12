@@ -54,7 +54,7 @@ Module.register("pollution", {
 		// Set locale.
 		moment.locale(this.config.language);
 
-		this.aqi = null;	 			// Air Quality
+		this.aqi = null;
 		this.aqi_t = null;
 		this.aqi_i = null;
 		this.aqi_s = null;
@@ -357,6 +357,7 @@ Module.register("pollution", {
 
 		setInterval(function () {
 			self.AirUpdate();
+			Log.info("Last AQI update", now);
 		}, updateInterval);
 	}
 });
