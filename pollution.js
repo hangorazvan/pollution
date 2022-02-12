@@ -68,6 +68,7 @@ Module.register("pollution", {
 		this.c_nh3 = null;
 
 		this.loaded = false;
+		this.AirUpdate();
 		this.scheduleUpdate(this.config.initialLoadDelay);
 	},
 
@@ -342,13 +343,10 @@ Module.register("pollution", {
 
 	/* scheduleUpdate()
 	 * Schedule next update.
-	 *
-	 * argument delay number - Milliseconds before next update. If empty, this.config.dayUpdateInterval is used.
 	 */
-	scheduleUpdate: function (delay) {
+	scheduleUpdate: function () {
 		var now = moment().format("HH:mm:ss");
 		var updateInterval = null;
-		var updateTimer = null;
 		var self = this;
 
 		if (now >= "07:00:00" && now <= "23:59:59") {
@@ -357,15 +355,8 @@ Module.register("pollution", {
 			updateInterval = this.config.nightUpdateInterval;
 		}
 
-		if (delay === void 0) { delay = null; }
-		var nextLoad = updateInterval;
-		if (delay !== null && delay >= 0) {
-			nextLoad = delay;
-		}
-
-		clearTimeout(updateTimer);
-		updateTimer = setInterval(function () {
+		setInterval(function () {
 			self.AirUpdate();
-		}, nextLoad);
+		}, updateInterval);
 	}
 });
