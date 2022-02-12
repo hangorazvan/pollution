@@ -357,7 +357,6 @@ Module.register("pollution", {
 
 		setInterval(function () {
 			self.AirUpdate();
-			Log.info("Last AQI update", now);
 		}, updateInterval);
 	}
 });
