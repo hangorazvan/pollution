@@ -69,6 +69,7 @@ Module.register("pollution", {
 
 		this.loaded = false;
 		this.scheduleUpdate(this.config.initialLoadDelay);
+		this.updateTimer = null;
 	},
 
 	// Override dom generator.
@@ -345,7 +346,7 @@ Module.register("pollution", {
 	 *
 	 * argument delay number - Milliseconds before next update. If empty, this.config.dayUpdateInterval is used.
 	 */
-	scheduleUpdate: function () {
+	scheduleUpdate: function (delay) {
 		var now = moment().format("HH:mm:ss");
 		var updateInterval = null;
 
@@ -355,9 +356,18 @@ Module.register("pollution", {
 			updateInterval = this.config.nightUpdateInterval;
 		}
 
+		var nextLoad = updateInterval;
+		if (typeof delay !== "undefined" && delay >= 0) {
+			nextLoad = delay;
+		}
+
 		var self = this;
-		setInterval(function () {
-			self.updateAir();
+		clearTimeout(this.updateTimer);
+		this.updateTimer = setTimeout(function () {
+			self.OneUpdate();
+			setTimeout(function () {
+				self.AirUpdate();
+			}, 2000);
 		}, nextLoad);
 	}
 });
