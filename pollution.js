@@ -364,10 +364,7 @@ Module.register("pollution", {
 		var self = this;
 		clearTimeout(this.updateTimer);
 		this.updateTimer = setTimeout(function () {
-			self.OneUpdate();
-			setTimeout(function () {
-				self.AirUpdate();
-			}, 2000);
+			self.AirUpdate();
 		}, nextLoad);
 	}
 });
