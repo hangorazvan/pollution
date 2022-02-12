@@ -242,7 +242,7 @@ Module.register("pollution", {
 	 * Requests new data from openweathermap.org.
 	 * Calls processAir on succesfull response.
 	 */
-	updateAir: function () {
+	AirUpdate: function () {
 		if (this.config.appid === "") {
 			Log.error("Air Pollution: APPID not set!");
 			return;
