@@ -1,5 +1,8 @@
 # Pollution (OpenWeatherMap/Air_Pollution)
 
+[![Platform](https://img.shields.io/badge/platform-MagicMirror-informational)](https://MagicMirror.builders)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://raw.githubusercontent.com/hangorazvan/MagicMirror2/master/LICENSE)
+
 https://github.com/hangorazvan/pollution
 
 MagicMirror2 stand alone module based on Openweathermap Air Pollution also included in Onecall module https://github.com/hangorazvan/onecall
