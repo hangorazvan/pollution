@@ -279,15 +279,13 @@ Module.register("pollution", {
 	 *
 	 * argument data object - air quality information received form openweathermap.org.
 	 */
-	processAir: function (data, momenttz) {
+	processAir: function (data) {
 		if (!data || !data.list === "undefined") {
 			return;
 		}
 
-		var mom = momenttz ? momenttz : moment; // Exception last.
-
 		this.aqi = data.list[0].main.aqi;
-		this.aqi_t = mom(data.list[0].dt, "X").format("HH:mm");
+		this.aqi_t = moment(data.list[0].dt, "X").format("HH:mm");
 		if (data.list[0].hasOwnProperty("components")) {
 			var aqi_p = data.list[0].components;
 			this.c_co = aqi_p.co;
