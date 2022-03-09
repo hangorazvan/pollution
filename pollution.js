@@ -11,6 +11,7 @@ Module.register("pollution", {
 		lon: "",
 		location: "",
 		appid: "",
+		backup: config.backup,                  // optional backup appid
 		units: config.units,
 		dayUpdateInterval: 10 * 60 * 1000,     // every 10 minutes
 		nightUpdateInterval: 15 * 60 * 1000,   // every 15 minutes
@@ -22,8 +23,9 @@ Module.register("pollution", {
 		decimalSymbol: ".",
 		appendLocationNameToHeader: true,
 		useLocationAsHeader: false,
+		oneLoader: false,             // use onecall for API call
 		
-		calculateAqi: false,        // calculate AQI from pollutants concentration (not fully tested)
+		calculateAqi: true,        // calculate AQI from pollutants concentration (not fully tested)
 		showAqiTime: true,          // show last update time
 		showAqiData: true,          // show AQI calculation pollutants, hidding last update
 		showPollution: false,       // snow list of all pollutants, hidding AQI calculation of all pollutants
@@ -68,25 +70,29 @@ Module.register("pollution", {
 		this.c_nh3 = null;
 
 		this.loaded = false;
-		this.AirUpdate();
-		this.scheduleUpdate(this.config.initialLoadDelay);
+		if (!this.config.oneLoader) {
+			this.AirUpdate();
+			this.scheduleUpdate(this.config.initialLoadDelay);
+		}
 	},
 
 	// Override dom generator.
 	getDom: function () {
-		if (this.config.appid === "") {
-			var wrapper = document.createElement("div");
-			wrapper.innerHTML = "Please set the correct openweather <i>appid</i> in the config for module: " + this.name + ".";
-			wrapper.className = "dimmed light small";
-			return wrapper;
+		if (!this.config.oneLoader) {
+			if (this.config.appid === "") {
+				var wrapper = document.createElement("div");
+				wrapper.innerHTML = "Please set the correct openweather <i>appid</i> in the config for module: " + this.name + ".";
+				wrapper.className = "dimmed light small";
+				return wrapper;
+			}
 		}
-			
+	
 		if (!this.loaded) {
 			var wrapper = document.createElement("div");
 			wrapper.innerHTML = this.translate("LOADING");
 			wrapper.className = "dimmed light small";
 			return wrapper;
-		} 
+		}
 
 		var wrapper = document.createElement("div");
 		wrapper.className = "airpollution";
@@ -232,9 +238,14 @@ Module.register("pollution", {
 	// Override notification handler.
 	notificationReceived: function (notification, payload, sender) {
 		if (notification === "DOM_OBJECTS_CREATED") {
-			if (this.config.appendLocationNameToHeader) {
+			if (!this.config.appendLocationNameToHeader) {
 				this.hide(0, { lockString: this.identifier });
 			}
+		}
+
+		if (notification === "AIR_RESPONSE") {
+			this.processAir(payload);
+		//	Log.info("Air " + payload);
 		}
 	},
 
@@ -260,10 +271,15 @@ Module.register("pollution", {
 					self.processAir(JSON.parse(this.response));
 				} else if (this.status === 401) {
 					self.updateDom(self.config.animationSpeed);
-					Log.error(self.name + ": Incorrect APPID.");
+					if (self.config.backup === "") {
+						Log.error("Air Pollution: backup APPID not set!");
+						return;
+					} else {
+						self.config.appid = self.config.backup;
+					}
 					retry = true;
 				} else {
-					Log.error(self.name + ": Could not load Air pollution.");
+					Log.error(self.name + ": Incorrect APPID. Could not load Air Pollution.");
 				}
 
 				if (retry) {
