@@ -23,7 +23,7 @@ Module.register("pollution", {
 		decimalSymbol: ".",
 		appendLocationNameToHeader: true,
 		useLocationAsHeader: false,
-		oneLoader: false,             // use onecall for API call
+		oneLoader: false,             // use onecall loader for API call
 		
 		calculateAqi: true,        // calculate AQI from pollutants concentration (not fully tested)
 		showAqiTime: true,          // show last update time

@@ -9,7 +9,7 @@
 https://github.com/hangorazvan/pollution
 
 MagicMirror2 stand alone module based on Openweathermap Air Pollution
-<br>Keep in mind that this module is for my personal use with specific css styling or settings and not necessarily for sharing so don't create issues or pull requests.
+<br>Keep in mind that this module is for my personal use and not necessarily for sharing so don't create issues or pull requests.
 
 #### Air Quality Index
 
@@ -29,6 +29,7 @@ MagicMirror2 stand alone module based on Openweathermap Air Pollution
 			showAqiTime: true,			// show last update time
 			showAqiData: true,			// show AQI calculation pollutants, hidding last update
 			showPollution: false,			// snow list of all pollutants, hidding AQI calculation of all pollutants
+			oneLoader: false,             // use onecall loader for API call
 		}
 	},
 
