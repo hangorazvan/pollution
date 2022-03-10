@@ -16,7 +16,6 @@ Module.register("pollution", {
 		dayUpdateInterval: 10 * 60 * 1000,     // every 10 minutes
 		nightUpdateInterval: 15 * 60 * 1000,   // every 15 minutes
 		initialLoadDelay: 0,                   // 0 seconds delay
-		retryDelay: 2000,
 		animationSpeed: 1000,
 		timeFormat: config.timeFormat,
 		language: config.language,
@@ -237,12 +236,6 @@ Module.register("pollution", {
 
 	// Override notification handler.
 	notificationReceived: function (notification, payload, sender) {
-		if (notification === "DOM_OBJECTS_CREATED") {
-			if (!this.config.appendLocationNameToHeader) {
-				this.hide(0, { lockString: this.identifier });
-			}
-		}
-
 		if (notification === "AIR_RESPONSE") {
 			this.processAir(payload);
 		//	Log.info("Air " + payload);
@@ -261,7 +254,6 @@ Module.register("pollution", {
 
 		var url = "https://api.openweathermap.org/data/2.5/air_pollution?lat=" + this.config.lat + "&lon=" + this.config.lon + "&appid=" + this.config.appid;
 		var self = this;
-		var retry = true;
 
 		var airRequest = new XMLHttpRequest();
 		airRequest.open("GET", url, true);
@@ -269,7 +261,7 @@ Module.register("pollution", {
 			if (this.readyState === 4) {
 				if (this.status === 200) {
 					self.processAir(JSON.parse(this.response));
-				} else if (this.status === 401) {
+				} else if (this.status === 401 || this.status === 429) {
 					self.updateDom(self.config.animationSpeed);
 					if (self.config.backup === "") {
 						Log.error("Air Pollution: backup APPID not set!");
@@ -277,13 +269,8 @@ Module.register("pollution", {
 					} else {
 						self.config.appid = self.config.backup;
 					}
-					retry = true;
 				} else {
 					Log.error(self.name + ": Incorrect APPID. Could not load Air Pollution.");
-				}
-
-				if (retry) {
-					self.scheduleUpdate(self.loaded ? -1 : self.config.retryDelay);
 				}
 			}
 		};
@@ -344,15 +331,9 @@ Module.register("pollution", {
 		//	Log.info("AIRQUALITY_INDEX", { index: "AQI_" + this.aqi });
 		}
 
-		if (!this.loaded) {
-			this.show(this.config.animationSpeed, { lockString: this.identifier });
-			this.loaded = true;
-		}
-
-		var self = this;
-		setTimeout(function () {
-			self.updateDom(self.config.animationSpeed);
-		}, this.config.initialLoadDelay);
+		this.show(this.config.animationSpeed, { lockString: this.identifier });
+		this.loaded = true;
+		this.updateDom(this.config.animationSpeed);
 	},
 
 	/* scheduleUpdate()
