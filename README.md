@@ -20,18 +20,39 @@ MagicMirror2 stand alone module based on Openweathermap Air Pollution
 		position: "top_right",
 		header: "Air Quality Index",
 		classes: "air quality",
-		disabled: false,
 		config: {
-			lat: "",				// your location latitude,
-			lon: "",				// your location longitude,
-			appid: "",				// your openweathermap API key,
-			calculateAqi: true,			// calculate AQI from pollutants concentration
-			showAqiTime: true,			// show last update time
-			showAqiData: true,			// show AQI calculation pollutants, hidding last update
-			showPollution: false,			// snow list of all pollutants, hidding AQI calculation of all pollutants
+			lat: "",                      // your location latitude,
+			lon: "",                      // your location longitude,
+			appid: "",                    // your openweathermap API key,
+			calculateAqi: false,          // calculate AQI from pollutants concentration
+			showAqiTime: true,            // show last update time
+			showAqiData: true,            // show AQI calculation pollutants, hidding last update
+			showPollution: true,          // snow list of all pollutants, hidding AQI calculation of all pollutants
 			oneLoader: false,             // use onecall loader for API call
 		}
 	},
+
+
+#### Air Quality Index with pollutans calculation accoring EU standards and oneLoader from onecall https://github.com/hangorazvan/onecall
+
+<img src=https://github.com/hangorazvan/pollution/blob/master/oneLoader.png>
+
+	{
+		module: "pollution",
+		position: "top_right",
+		classes: "air quality",
+		config: {
+			lat: "",                      // your location latitude,
+			lon: "",                      // your location longitude,
+			appid: "",                    // your openweathermap API key,
+			calculateAqi: true,          // calculate AQI from pollutants concentration
+			showAqiTime: true,            // show last update time
+			showAqiData: true,            // show AQI calculation pollutants, hidding last update
+			showPollution: true,          // snow list of all pollutants, hidding AQI calculation of all pollutants
+			oneLoader: true,              // use onecall loader for API call
+		}
+	},
+
 
 	/*
 	Quality   Index     Sub-index   CAQI calculation from highest pollutant concentration in μg/m3
