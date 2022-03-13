@@ -25,7 +25,6 @@ MagicMirror2 stand alone module based on Openweathermap Air Pollution
 			appid: "",                    // your openweathermap API key,
 			calculateAqi: false,          // calculate AQI from pollutants concentration
 			showAqiTime: true,            // show last update time
-			showAqiData: true,            // show AQI calculation pollutants, hidding last update
 			showPollution: true,          // snow list of all pollutants, hidding AQI calculation of all pollutants
 			oneLoader: false,             // use onecall loader for API call
 		}
@@ -43,9 +42,8 @@ MagicMirror2 stand alone module based on Openweathermap Air Pollution
 		classes: "air quality",
 		config: {
 			calculateAqi: true,           // calculate AQI from pollutants concentration
-			showAqiTime: true,            // show last update time
 			showAqiData: true,            // show AQI calculation pollutants, hidding last update
-			showPollution: true,          // snow list of all pollutants, hidding AQI calculation of all pollutants
+			showPollution: false,         // snow list of all pollutants, hidding AQI calculation of all pollutants
 			oneLoader: true,              // use onecall loader for API call
 		}
 	},
