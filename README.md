@@ -45,7 +45,7 @@ MagicMirror2 stand alone module based on Openweathermap Air Pollution
 			lat: "",                      // your location latitude,
 			lon: "",                      // your location longitude,
 			appid: "",                    // your openweathermap API key,
-			calculateAqi: true,          // calculate AQI from pollutants concentration
+			calculateAqi: true,           // calculate AQI from pollutants concentration
 			showAqiTime: true,            // show last update time
 			showAqiData: true,            // show AQI calculation pollutants, hidding last update
 			showPollution: true,          // snow list of all pollutants, hidding AQI calculation of all pollutants
